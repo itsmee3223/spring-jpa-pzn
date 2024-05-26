@@ -1,5 +1,5 @@
-CREATE DATABASE spring_data_jpa;
-USE spring_data_jpa;
+CREATE DATABASE spring_jpa;
+USE spring_jpa;
 
 CREATE TABLE categories
 (
