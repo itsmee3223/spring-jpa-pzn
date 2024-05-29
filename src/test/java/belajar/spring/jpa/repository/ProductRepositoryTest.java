@@ -89,8 +89,17 @@ class ProductRepositoryTest {
     void count() {
         Long count = productRepository.count();
         assertEquals(2L, count);
-        
+
         Long products = productRepository.countByCategory_Name("SHOES MURAH");
         assertEquals(2L, products);
+    }
+
+    @Test
+    void exists() {
+        boolean exist = productRepository.existsByName("Adidas");
+        assertTrue(exist);
+
+        exist = productRepository.existsByName("SHOES MURAH");
+        assertFalse(exist);
     }
 }
