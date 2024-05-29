@@ -158,4 +158,18 @@ class ProductRepositoryTest {
         assertEquals(1, products.getContent().size());
         assertEquals("Nike", products.getContent().get(0).getName());
     }
+
+    @Test
+    void queryAnnotation() {
+        Pageable pageable = PageRequest.of(0, 1, Sort.by(Sort.Order.desc("id")));
+        Page<Product> products = productRepository.searchProduct("%Nike%", pageable);
+        assertEquals(1, products.getContent().size());
+        assertEquals("Nike", products.getContent().get(0).getName());
+
+        products = productRepository.searchProduct("%SHOES%", pageable);
+        assertEquals(1, products.getContent().size());
+        assertEquals("SHOES MURAH", products.getContent().get(0).getCategory().getName());
+    }
+
+
 }

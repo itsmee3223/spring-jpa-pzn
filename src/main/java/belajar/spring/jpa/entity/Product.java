@@ -10,6 +10,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Entity
 @Table(name = "products")
+// named query support pageable tapi tidak support sort
+// jika ada sort maka akan dihiraukan
+// jika tetap ingin menggunakan sort maka dibuat manual pada query bukan pada method
 @NamedQueries({
         @NamedQuery(
                 name = "Product.searchProductUsingName",
