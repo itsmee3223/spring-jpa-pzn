@@ -171,5 +171,25 @@ class ProductRepositoryTest {
         assertEquals("SHOES MURAH", products.getContent().get(0).getCategory().getName());
     }
 
+    @Test
+    void queryModifying() {
+        Category category = categoryRepository.findById(1L).orElse(null);
+        Product product = new Product();
+        product.setName("oke");
+        product.setPrice(100_000L);
+        product.setCategory(category);
+
+        productRepository.save(product);
+
+        transactionOperations.executeWithoutResult(transactionStatus -> {
+            int updated = productRepository.updatePriceToZeroByName("oke");
+            assertEquals(1, updated);
+            
+            int deleted = productRepository.deleteUsingName("oke");
+            assertEquals(1, deleted);
+
+        });
+    }
+
 
 }

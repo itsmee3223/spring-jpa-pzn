@@ -6,6 +6,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
@@ -33,6 +34,19 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     )
 //    untuk nama method bebas
     Page<Product>  searchProduct(@Param("name") String name, Pageable pageable);
+
+//    untuk melakukan modify yaitu mengubah dan menghapus data maka perlu  menambhakan annotation @Modifying
+    @Modifying
+    @Query(
+            value = "delete from Product p where p.name = :name"
+    )
+    int deleteUsingName(@Param("name") String name);
+
+    @Modifying
+    @Query(
+            value = "update Product p set p.price = 0 where p.name = :name"
+    )
+    int updatePriceToZeroByName(@Param("name") String name);
 
     List<Product> findAllByCategory_Name(String name);
 
