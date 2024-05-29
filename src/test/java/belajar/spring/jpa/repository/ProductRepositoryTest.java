@@ -140,13 +140,22 @@ class ProductRepositoryTest {
         product.setName("oke");
         product.setPrice(10_000_000L);
         product.setCategory(category);
-
+//      transaksi 1
         productRepository.save(product);
 
+//      trsansaki 2
         int delete = productRepository.deleteByName("oke1");
         assertEquals(1, delete);
-
+//      transaksi 3
         delete = productRepository.deleteByName("oke1");
         assertEquals(0, delete);
+    }
+
+    @Test
+    void namedQuery() {
+        Pageable pageable = PageRequest.of(0, 1);
+        Page<Product> products = productRepository.searchProductUsingName("Nike", pageable);
+        assertEquals(1, products.getContent().size());
+        assertEquals("Nike", products.getContent().get(0).getName());
     }
 }
