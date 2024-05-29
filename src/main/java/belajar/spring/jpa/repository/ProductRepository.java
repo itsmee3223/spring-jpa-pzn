@@ -19,6 +19,8 @@ import java.util.stream.Stream;
 @Repository
 public interface ProductRepository extends JpaRepository<Product, Long>, JpaSpecificationExecutor<Product> {
 
+    <T> List<T> findAllByNameLike(String name, Class<T> tClass);
+
     Long countByCategory_Name(String name);
 //  tambah annotation transactional
     @Transactional

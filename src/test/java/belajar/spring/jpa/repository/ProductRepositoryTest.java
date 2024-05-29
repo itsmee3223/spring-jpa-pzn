@@ -2,6 +2,8 @@ package belajar.spring.jpa.repository;
 
 import belajar.spring.jpa.entity.Category;
 import belajar.spring.jpa.entity.Product;
+import belajar.spring.jpa.model.ProductPrice;
+import belajar.spring.jpa.model.SimpleProduct;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -304,6 +306,15 @@ class ProductRepositoryTest {
 
         List<Product> products = productRepository.findAll(specification);
         assertEquals(2, products.size());
+    }
+
+    @Test
+    void projection(){
+        List<SimpleProduct> products = productRepository.findAllByNameLike("%Adi%", SimpleProduct.class);
+        assertEquals(1, products.size());
+
+        List<ProductPrice> productsPrice = productRepository.findAllByNameLike("%Ni%", ProductPrice.class);
+        assertEquals(1, products.size());
     }
 
 }
