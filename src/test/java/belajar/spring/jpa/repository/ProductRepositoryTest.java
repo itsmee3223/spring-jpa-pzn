@@ -10,6 +10,7 @@ import org.springframework.data.domain.*;
 import org.springframework.transaction.support.TransactionOperations;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -219,5 +220,29 @@ class ProductRepositoryTest {
         }
     }
 
+    @Test
+    void lock1(){
+        transactionOperations.executeWithoutResult(transactionStatus -> {
+            try {
+                Product product = productRepository.findFirstByIdEquals(1L).orElse(null);
+                assertNotNull(product);
+                product.setPrice(30_000_000L);
+                Thread.sleep(20_000L);
+                productRepository.save(product);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+        });
+    }
+
+    @Test
+    void lock2(){
+        transactionOperations.executeWithoutResult(transactionStatus -> {
+            Product product = productRepository.findFirstByIdEquals(1L).orElse(null);
+            assertNotNull(product);
+            product.setPrice(10_000_000L);
+            productRepository.save(product);
+        });
+    }
 
 }
