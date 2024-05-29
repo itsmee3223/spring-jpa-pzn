@@ -6,10 +6,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.*;
 import org.springframework.transaction.support.TransactionOperations;
 
 import java.util.List;
@@ -209,6 +206,17 @@ class ProductRepositoryTest {
 //        stream.forEach(product -> {
 //            System.out.println(product.getId() + " : " + product.getName());
 //        });
+    }
+
+    @Test
+    void testSlice(){
+        Pageable pageable = PageRequest.of(0, 1);
+        Category category = categoryRepository.findById(1L).orElse(null);
+
+        Slice<Product> allByCategory = productRepository.findAllByCategory(category, pageable);
+        while (allByCategory.hasNext()){
+            allByCategory = productRepository.findAllByCategory(category, allByCategory.nextPageable());
+        }
     }
 
 

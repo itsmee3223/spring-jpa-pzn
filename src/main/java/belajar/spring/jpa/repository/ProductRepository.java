@@ -5,6 +5,7 @@ import belajar.spring.jpa.entity.Product;
 import jakarta.transaction.Transactional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -49,6 +50,9 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
             value = "update Product p set p.price = 0 where p.name = :name"
     )
     int updatePriceToZeroByName(@Param("name") String name);
+
+//    jika ingin mendapatkan data apakah ada next atau previous page bisa menggunakan Slice<T>
+    Slice<Product> findAllByCategory(Category category, Pageable pageable);
 
     Stream<Product> streamAllByCategory(Category category);
 
