@@ -255,7 +255,39 @@ class ProductRepositoryTest {
         assertNotNull(category.getName());
         assertNotNull(category.getCreatedDate());
         assertNotNull(category.getLastModifiedDate());
+    }
+    
+    @Test
+    void example1(){
+        Category category = new Category();
+        category.setName("SHOES MURAH");
+        Example<Category> example = Example.of(category);
 
+        List<Category> categories = categoryRepository.findAll(example);
+        assertEquals(1, categories.size());
+    }
+
+    @Test
+    void example2(){
+        Category category = new Category();
+        category.setName("SHOES MURAH");
+        category.setId(1L);
+        Example<Category> example = Example.of(category);
+
+        List<Category> categories = categoryRepository.findAll(example);
+        assertEquals(1, categories.size());
+    }
+
+    @Test
+    void exampleMatchers(){
+        Category category = new Category();
+        category.setName("SHOeS MURAh");
+        ExampleMatcher matcher = ExampleMatcher.matching().withIgnoreNullValues().withIgnoreCase();
+
+        Example<Category> example = Example.of(category, matcher);
+
+        List<Category> categories = categoryRepository.findAll(example);
+        assertEquals(1, categories.size());
     }
 
 }
