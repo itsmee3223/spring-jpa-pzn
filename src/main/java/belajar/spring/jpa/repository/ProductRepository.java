@@ -1,5 +1,6 @@
 package belajar.spring.jpa.repository;
 
+import belajar.spring.jpa.entity.Category;
 import belajar.spring.jpa.entity.Product;
 import jakarta.transaction.Transactional;
 import org.springframework.data.domain.Page;
@@ -12,6 +13,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.stream.Stream;
 
 @Repository
 public interface ProductRepository extends JpaRepository<Product, Long> {
@@ -47,6 +49,8 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
             value = "update Product p set p.price = 0 where p.name = :name"
     )
     int updatePriceToZeroByName(@Param("name") String name);
+
+    Stream<Product> streamAllByCategory(Category category);
 
     List<Product> findAllByCategory_Name(String name);
 

@@ -13,6 +13,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.transaction.support.TransactionOperations;
 
 import java.util.List;
+import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -184,11 +185,30 @@ class ProductRepositoryTest {
         transactionOperations.executeWithoutResult(transactionStatus -> {
             int updated = productRepository.updatePriceToZeroByName("oke");
             assertEquals(1, updated);
-            
+
             int deleted = productRepository.deleteUsingName("oke");
             assertEquals(1, deleted);
 
         });
+    }
+
+    @Test
+    void stream() {
+        Category category = categoryRepository.findById(1L).orElse(null);
+//        jika menggunakan stream kita harus menggunakan transaction baik itu menggunakan annotaion atau transactionalOperations dan lainnya
+//        tapi jika diakses diluar dari situ maka transaction akan dihentikan
+//        sehingga data tidak bisa distream dan error
+        transactionOperations.executeWithoutResult(transactionStatus -> {
+            Stream<Product> stream = productRepository.streamAllByCategory(category);
+            stream.forEach(product -> {
+                System.out.println(product.getId() + " : " + product.getName());
+            });
+        });
+
+//        tidak bisa diakses karena tidak dalam transaction akan error
+//        stream.forEach(product -> {
+//            System.out.println(product.getId() + " : " + product.getName());
+//        });
     }
 
 
