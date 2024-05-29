@@ -84,4 +84,13 @@ class ProductRepositoryTest {
         assertEquals(2, products.getTotalPages());
         assertEquals("Nike", products.getContent().get(0).getName());
     }
+
+    @Test
+    void count() {
+        Long count = productRepository.count();
+        assertEquals(2L, count);
+        
+        Long products = productRepository.countByCategory_Name("SHOES MURAH");
+        assertEquals(2L, products);
+    }
 }
