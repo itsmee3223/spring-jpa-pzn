@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.*;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.transaction.support.TransactionOperations;
 
 import java.util.List;
@@ -288,6 +289,21 @@ class ProductRepositoryTest {
 
         List<Category> categories = categoryRepository.findAll(example);
         assertEquals(1, categories.size());
+    }
+
+    @Test
+    void specification(){
+        Specification<Product> specification = (root, query, criteriaBuilder) -> {
+            return query.where(
+                    criteriaBuilder.or(
+                            criteriaBuilder.equal(root.get("name"), "Nike"),
+                            criteriaBuilder.equal(root.get("name"), "Adidas")
+                    )
+            ).getRestriction();
+        };
+
+        List<Product> products = productRepository.findAll(specification);
+        assertEquals(2, products.size());
     }
 
 }
