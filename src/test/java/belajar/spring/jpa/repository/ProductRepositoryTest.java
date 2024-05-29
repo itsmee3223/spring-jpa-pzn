@@ -102,4 +102,25 @@ class ProductRepositoryTest {
         exist = productRepository.existsByName("SHOES MURAH");
         assertFalse(exist);
     }
+
+    @Test
+    void delete(){
+        transactionOperations.executeWithoutResult(transactionStatus -> {
+            Category category = categoryRepository.findById(1L).orElse(null);
+            assertNotNull(category);
+
+            Product product = new Product();
+            product.setName("oke");
+            product.setPrice(10_000_000L);
+            product.setCategory(category);
+
+            productRepository.save(product);
+
+            int delete = productRepository.deleteByName("oke");
+            assertEquals(1, delete);
+
+            delete = productRepository.deleteByName("oke");
+            assertEquals(0, delete);
+        });
+    }
 }
