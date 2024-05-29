@@ -245,4 +245,17 @@ class ProductRepositoryTest {
         });
     }
 
+    @Test
+    void audit(){
+        Category category = new Category();
+        category.setName("NEW");
+        categoryRepository.save(category);
+
+        assertNotNull(category.getId());
+        assertNotNull(category.getName());
+        assertNotNull(category.getCreatedDate());
+        assertNotNull(category.getLastModifiedDate());
+
+    }
+
 }
