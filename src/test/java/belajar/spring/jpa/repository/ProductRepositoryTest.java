@@ -105,6 +105,10 @@ class ProductRepositoryTest {
 
     @Test
     void delete(){
+//        delete harus dalam transaksi
+//        jika tidak transaksi maka akan terjadi error
+//        karena secara default turunan menggunakan @Transactional(readOnly=true) kecuali pada bebapara query method tertentu yang sudah diubah
+//        https://docs.spring.io/spring-data/data-jpa/docs/current/api/org/springframework/data/jpa/repository/support/SimpleJpaRepository.html
         transactionOperations.executeWithoutResult(transactionStatus -> {
             Category category = categoryRepository.findById(1L).orElse(null);
             assertNotNull(category);
@@ -122,5 +126,27 @@ class ProductRepositoryTest {
             delete = productRepository.deleteByName("oke");
             assertEquals(0, delete);
         });
+    }
+
+    @Test
+    void deleteWithSeperateTransaction(){
+//        karena sudah ditambhkan annotation pada methodnya maka tidak perlu lagi dibungkus dalam transaction
+//        namun mereka akan diekseuki pada transaksi yang berbeda
+//        maka jika terjadi error tidak akan ada rollback
+        Category category = categoryRepository.findById(1L).orElse(null);
+        assertNotNull(category);
+
+        Product product = new Product();
+        product.setName("oke");
+        product.setPrice(10_000_000L);
+        product.setCategory(category);
+
+        productRepository.save(product);
+
+        int delete = productRepository.deleteByName("oke1");
+        assertEquals(1, delete);
+
+        delete = productRepository.deleteByName("oke1");
+        assertEquals(0, delete);
     }
 }
